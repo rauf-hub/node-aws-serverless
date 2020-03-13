@@ -1,0 +1,56 @@
+service: ntuc
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: dev
+  region: ap-southeast-1
+
+  vpc:
+    securityGroupIds:
+      - sg-7ed90301
+    subnetIds:
+      - subnet-100aed58
+      - subnet-3306a46a
+      - subnet-3ca1575a
+functions:
+  ntuc:
+    handler: src/handler.handler
+    events:
+      - http:
+          path: nationalities
+          method: get
+          cors: true
+      - http:
+          path: users/register
+          method: post
+          cors: true
+      - http:
+          path: users/resend-otp
+          method: post
+          cors: true
+      - http:
+          path: users/verify-otp
+          method: post
+      - http:
+          path: users/{id}
+          method: patch
+          cors: true
+      - http:
+          path: products
+          method: get
+          cors: true
+      - http:
+          path: campaigns/check-campaign-availability/{id}
+          method: post
+          cors: true
+      - http:
+          path: users/redeem-gift
+          method: post
+          cors: true
+      - http:
+          path: users/{id}
+          method: get
+          cors: true
+plugins:
+  - serverless-offline
